@@ -20,16 +20,29 @@ public class PessoaService {
 		Pessoa pessoaAtualizar = pessoaRepository.findById(codigo).get();
 
 		if (pessoaAtualizar != null) {
-			
+
 			BeanUtils.copyProperties(pessoa, pessoaAtualizar, "codigo");
-			
+
 			pessoaAtualizar = pessoaRepository.save(pessoaAtualizar);
-			
-		   
-	        return ResponseEntity.status(HttpStatus.OK).body(pessoaAtualizar);
+
+			return ResponseEntity.status(HttpStatus.OK).body(pessoaAtualizar);
 
 		}
 
-		    throw new EmptyResultDataAccessException(1);
+		throw new EmptyResultDataAccessException(1);
+	}
+
+	public void atualizarPropiedadeAtivo(Long codigo, Boolean ativo) {
+
+		Pessoa pessoaAtualizar = pessoaRepository.findById(codigo).get();
+
+		if (pessoaAtualizar != null) {
+
+			pessoaAtualizar.setAtivo(ativo);
+
+			pessoaAtualizar = pessoaRepository.save(pessoaAtualizar);
+
+		}
+
 	}
 }

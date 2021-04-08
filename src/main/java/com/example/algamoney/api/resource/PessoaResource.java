@@ -1,12 +1,11 @@
 package com.example.algamoney.api.resource;
 
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.algamoney.api.event.RecursoCriadoEvent;
@@ -53,17 +53,53 @@ public class PessoaResource {
 	}
  	
  	@DeleteMapping("/{codigo}")
- 	public ResponseEntity remover(@PathVariable Long codigo) {
+ 	public ResponseEntity<Pessoa> remover(@PathVariable Long codigo) {
  		
  		pessoaRepository.deleteById(codigo);
  		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
  	}
  	@PutMapping("/{codigo}")
-	public ResponseEntity<?> atualizar
+	public ResponseEntity<Pessoa> atualizar
 	(@PathVariable Long codigo, @Valid @RequestBody Pessoa pessoa) {
 		
+ 		
+ 		 try {
  		 pessoaService.atualizar(codigo, pessoa);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(pessoa);
+		
+ 		 }catch (Exception e) {
+			
+ 			 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 	}
+ 	
+ 	
+ 	  @PutMapping("/{codigo}/ativo")
+ 	  @ResponseStatus(HttpStatus.NO_CONTENT)
+ 	  public void atualizarPropriedadeAtivo(@PathVariable Long codigo, @RequestBody Boolean ativo) {
+ 		  
+ 		  try {
+ 		   pessoaService.atualizarPropiedadeAtivo(codigo, ativo);
+ 		   
+ 		  }catch (Exception e) {
+ 			 throw new EmptyResultDataAccessException(1);
+		}
+ 	  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
