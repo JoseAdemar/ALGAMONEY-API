@@ -1,7 +1,5 @@
 package com.example.algamoney.api.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,19 +15,21 @@ public class PessoaService {
 
 	@Autowired
 	private PessoaRepository pessoaRepository;
-	
-	public Pessoa atualizar(Long codigo, Pessoa pessoa) {
-	Optional<Pessoa> pessoaSalva = pessoaRepository.findById(codigo);
-	   
-	   if(pessoaSalva.isEmpty()) {
+
+	public ResponseEntity<Pessoa> atualizar(Long codigo, Pessoa pessoa) {
+		Pessoa pessoaAtualizar = pessoaRepository.findById(codigo).get();
+
+		if (pessoaAtualizar != null) {
+			
+			BeanUtils.copyProperties(pessoa, pessoaAtualizar, "codigo");
+			
+			pessoaAtualizar = pessoaRepository.save(pessoaAtualizar);
+			
 		   
-		   throw new EmptyResultDataAccessException(1);
-	   }
-	    		    
-	    BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
-	    
-	   return  pessoaRepository.save(pessoaSalva.get());
-	    
-	    
+	        return ResponseEntity.status(HttpStatus.OK).body(pessoaAtualizar);
+
+		}
+
+		    throw new EmptyResultDataAccessException(1);
 	}
 }

@@ -59,9 +59,11 @@ public class PessoaResource {
  		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
  	}
  	@PutMapping("/{codigo}")
-	public ResponseEntity<Pessoa> atualizar
+	public ResponseEntity<?> atualizar
 	(@PathVariable Long codigo, @Valid @RequestBody Pessoa pessoa) {
-		Optional<Pessoa> pessoaSalva = Optional.of(pessoaService.atualizar(codigo, pessoa));
+		
+ 		 pessoaService.atualizar(codigo, pessoa);
+		
 		return ResponseEntity.status(HttpStatus.OK).body(pessoa);
 	}
 }
