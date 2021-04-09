@@ -16,7 +16,7 @@ public class PessoaService {
 	@Autowired
 	private PessoaRepository pessoaRepository;
 
-	public ResponseEntity<Pessoa> atualizar(Long codigo, Pessoa pessoa) {
+	public ResponseEntity<Pessoa> buscarPessoaPeloCodigo(Long codigo, Pessoa pessoa) {
 		Pessoa pessoaAtualizar = pessoaRepository.findById(codigo).get();
 
 		if (pessoaAtualizar != null) {

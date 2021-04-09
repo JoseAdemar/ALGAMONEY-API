@@ -64,7 +64,7 @@ public class PessoaResource {
 		
  		
  		 try {
- 		 pessoaService.atualizar(codigo, pessoa);
+ 		 pessoaService.buscarPessoaPeloCodigo(codigo, pessoa);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(pessoa);
 		
